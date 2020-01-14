@@ -6,38 +6,38 @@ import cats.implicits._
 
 object NoteModule {
 
-  def isNoteExists[F[_]:Monad](title:String)(implicit dsl:NoteDsl[F]): F[Boolean] =
+  def isNoteExists[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]): F[Boolean] =
     dsl.findByTitle(title).map(_.fold(_ => false, _ => true))
 
-  def create[F[_]](title:String,content:String)(implicit dsl:NoteDsl[F], F:Monad[F]): F[Either[NoteError,Note]] =
+  def create[F[_]](title:String,content:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]): F[Either[NoteError,Note]] =
     for {
       check <- isNoteExists[F](title)
       r <- if(check) F.pure(Left(AlreadyExists):Either[NoteError, Note]) else dsl.create(title)(content)
       _ <- dsl.info(s"Note created with title $title")
     } yield r
 
-  def searchNoteByTitle[F[_]:Monad](title:String)(implicit dsl:NoteDsl[F]):F[Either[NoteError,Note]] =
+  def searchNoteByTitle[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]):F[Either[NoteError,Note]] =
     for {
       note <- dsl.findByTitle(title)
       _ <- dsl.info(s"title searched is $title")
       _ <- dsl.incrementByTitle(title)
     } yield note
 
-  def searchNoteByTag[F[_]:Monad](tag:String)(implicit dsl:NoteDsl[F]):F[Either[NoteError,List[Note]]] =
+  def searchNoteByTag[F[_]:Monad](tag:String)(implicit dsl:NoteAppDsl[F]):F[Either[NoteError,List[Note]]] =
     for {
       notes <- dsl.findByTag(tag)
       _ <- dsl.info(s"tag searched is $tag")
       _ <- dsl.incrementByTag(tag)
     } yield notes
 
-  def deleteAndListRemainingNotes[F[_]:Monad](title:String)(implicit dsl:NoteDsl[F]):F[Either[NoteError,List[Note]]] =
+  def deleteAndListRemainingNotes[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]):F[Either[NoteError,List[Note]]] =
     for {
       _ <- dsl.delete(title)
       _ <- dsl.info(s"Note with the title $title is deleted")
       notes <- dsl.listAllNotes
     } yield notes
 
-  def metricData[F[_]:Monad](implicit dsl:NoteDsl[F]):F[Either[NoteError,List[MetricData]]] =
+  def metricData[F[_]:Monad](implicit dsl:NoteAppDsl[F]):F[Either[NoteError,List[MetricData]]] =
     for {
       notes <- dsl.listAllNotes
       titles = notes.fold(_ => List(), _.map(_.title))
@@ -58,10 +58,10 @@ object NoteModule {
     loop(list,Either.right(List()))
   }
 
-  def metricDataByTitle[F[_]:Monad](titles:List[String])(implicit dsl:NoteDsl[F]): F[Either[MetricError, List[MetricData]]] =
+  def metricDataByTitle[F[_]:Monad](titles:List[String])(implicit dsl:NoteAppDsl[F]): F[Either[MetricError, List[MetricData]]] =
       titles.map(t => dsl.titleCount(t)).sequence.map(sequenceEither)
 
-  def metricDataByTags[F[_]:Monad](tags:List[String])(implicit dsl:NoteDsl[F]): F[Either[MetricError, List[MetricData]]] =
+  def metricDataByTags[F[_]:Monad](tags:List[String])(implicit dsl:NoteAppDsl[F]): F[Either[MetricError, List[MetricData]]] =
     tags.map(t => dsl.tagCount(t)).sequence.map(sequenceEither)
 
 }

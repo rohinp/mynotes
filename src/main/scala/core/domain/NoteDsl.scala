@@ -2,10 +2,11 @@ package core.domain
 
 sealed trait NoteError
 case object NotFound extends NoteError
+case object EmptyNoteRepo extends NoteError
 case object AlreadyExists extends NoteError
 case object InvalidNoteTitle extends NoteError
 
-trait Notes[F[_], Title, Tag, Content] {
+trait NoteDsl[F[_], Title, Tag, Content] {
   def listAllNotes:F[Either[NoteError,List[Note]]]
   def create:Title => Content => F[Either[NoteError,Note]]
   def findByTitle:Title => F[Either[NoteError,Note]]
@@ -14,7 +15,7 @@ trait Notes[F[_], Title, Tag, Content] {
   def delete:Title => F[Either[NoteError,Unit]]
 }
 
-trait Log[F[_]] {
+trait LogDsl[F[_]] {
   def info:String => F[Unit]
   def error:String => F[Unit]
 }
@@ -26,11 +27,11 @@ case class TagCounter(tag:String,count:Int) extends MetricData
 sealed trait MetricError extends NoteError
 case object MetricNotFound extends MetricError
 
-trait Metric[F[_], Title, Tag] {
+trait MetricDsl[F[_], Title, Tag] {
   def incrementByTitle:Title => F[Either[MetricError,Unit]]
   def incrementByTag:Tag => F[Either[MetricError, Unit]]
   def titleCount:Title => F[Either[MetricError,MetricData]]
   def tagCount:Tag => F[Either[MetricError,MetricData]]
 }
 
-trait NoteDsl[F[_]] extends Notes[F,String, String, String] with Log[F] with Metric[F,String, String]
+trait NoteAppDsl[F[_]] extends NoteDsl[F,String, String, String] with LogDsl[F] with MetricDsl[F,String, String]
