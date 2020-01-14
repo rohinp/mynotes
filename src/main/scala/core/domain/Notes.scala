@@ -1,4 +1,4 @@
-package core
+package core.domain
 
 sealed trait NoteError
 case object NotFound extends NoteError
