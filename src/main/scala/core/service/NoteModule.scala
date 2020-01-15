@@ -9,11 +9,18 @@ object NoteModule {
   def isNoteExists[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]): F[Boolean] =
     dsl.findByTitle(title).map(_.fold(_ => false, _ => true))
 
-  def create[F[_]](title:String,content:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]): F[Either[NoteError,Note]] =
+  def create[F[_]](title:String,tag:Set[String], content:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]): F[Either[NoteError,Note]] =
     for {
       check <- isNoteExists[F](title)
-      r <- if(check) F.pure(Left(AlreadyExists):Either[NoteError, Note]) else dsl.create(title)(content)
+      r <- if(check) F.pure(Left(AlreadyExists):Either[NoteError, Note]) else dsl.create(title)(tag)(content)
       _ <- dsl.info(s"Note created with title $title")
+    } yield r
+
+  def modify[F[_]](title:String,tag:Set[String], content:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]): F[Either[NoteError,Note]] =
+    for {
+      check <- isNoteExists[F](title)
+      r <- if(!check) F.pure(Left(NotFound):Either[NoteError, Note]) else dsl.modify(title)(tag)(content)
+      _ <- dsl.info(s"Note modified with title $title")
     } yield r
 
   def searchNoteByTitle[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]):F[Either[NoteError,Note]] =
