@@ -6,9 +6,9 @@ import core.domain.{EmptyNoteRepo, MetricData, MetricError, MetricNotFound, NotF
 object NoteInterpreter {
 
   case class Logger() {
-    def info: String => Unit = msg => println(Console.YELLOW + msg)
+    def info: String => Unit = msg => println(Console.YELLOW + "Info: " + msg)
 
-    def error: String => Unit = msg => println(Console.RED + msg)
+    def error: String => Unit = msg => println(Console.RED + "Error: " + msg)
   }
 
   type NoteRepo = List[Note]

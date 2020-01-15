@@ -37,7 +37,7 @@ object NoteModule {
       _ <- dsl.incrementByTag(tag)
     } yield notes
 
-  def deleteAndListRemainingNotes[F[_]:Monad](title:String)(implicit dsl:NoteAppDsl[F]):F[Either[NoteError,List[Note]]] =
+  def deleteAndListRemainingNotes[F[_]](title:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]):F[Either[NoteError,List[Note]]] =
     for {
       _ <- dsl.delete(title)
       _ <- dsl.info(s"Note with the title $title is deleted")
