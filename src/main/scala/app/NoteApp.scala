@@ -1,6 +1,7 @@
 package app
 import core.service.NoteModule._
-import interpreter.NoteInterpreter._
+import interpreter.NoteAppDslInMemory._
+import repo.Repositories
 
 object NoteApp extends App {
 
@@ -10,11 +11,18 @@ object NoteApp extends App {
     _ <- create("n3",Set("tag3","tag1"),"some data13333")
     _ <- create("n4",Set("tag3","tag4"),"some data444")
     _ <- create("n5",Set("tag3","tag2"),"some data5555")
+    _ <- searchNoteByTag("tag2")
+    _ <- searchNoteByTitle("n3")
+    _ <- searchNoteByTitle("n3")
     _ <- deleteAndListRemainingNotes("n2")
     _ <- modify("n3",Set(),"modified")
   } yield ()
 
-  println(Console.WHITE + "*" * 50)
-  println(Console.GREEN + noteProgram.run(Repositories(List(),List())).value._1.noteRepo.mkString("\n"))
+  private val inMemoryNoteState = noteProgram.run(Repositories(List(), List())).value._1
+  println((Console.WHITE + "*" * 25) + "Note Repo" + (Console.WHITE + "*" * 25))
+  println(Console.GREEN + inMemoryNoteState.noteRepo.mkString("\n"))
+
+  println((Console.WHITE + "*" * 25) + "Metric Data" + (Console.WHITE + "*" * 25))
+  println(Console.GREEN + inMemoryNoteState.metricRepo.mkString("\n"))
   println(Console.WHITE + "*" * 50)
 }
