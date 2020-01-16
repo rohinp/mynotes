@@ -3,6 +3,7 @@ package core.service
 import cats.Monad
 import core.domain._
 import cats.implicits._
+import NoteMetricModule._
 
 object NoteModule {
 
@@ -27,14 +28,14 @@ object NoteModule {
     for {
       note <- dsl.findByTitle(title)
       _ <- dsl.info(s"title searched is $title")
-      _ <- dsl.incrementByTitle(title)
+      _ <- incrementByTitle[F](title)
     } yield note
 
   def searchNoteByTag[F[_]](tag:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]):F[Either[NoteError,List[Note]]] =
     for {
       notes <- dsl.findByTag(tag)
       _ <- dsl.info(s"tag searched is $tag")
-      _ <- dsl.incrementByTag(tag)
+      _ <- incrementByTag[F](tag)
     } yield notes
 
   def deleteAndListRemainingNotes[F[_]](title:String)(implicit dsl:NoteAppDsl[F], F:Monad[F]):F[Either[NoteError,List[Note]]] =

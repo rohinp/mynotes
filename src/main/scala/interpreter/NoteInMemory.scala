@@ -24,8 +24,7 @@ trait NoteInMemory extends NoteDsl[MyStateRepo,String, String, String]{
   def findByTag: String => MyStateRepo[Either[NoteError, List[Note]]] = tag =>
     State.inspect(repos => {
       val filterResults = repos.noteRepo.filter(_.tags.contains(tag))
-      if (filterResults.nonEmpty) Right(filterResults)
-      else Left(NotFound)
+      if (filterResults.nonEmpty) Right(filterResults) else Left(NotFound)
     })
 
   def modify: String => Set[String] => String => MyStateRepo[Either[NoteError, Note]] =
@@ -43,10 +42,8 @@ trait NoteInMemory extends NoteDsl[MyStateRepo,String, String, String]{
 
   def delete: String => MyStateRepo[Either[NoteError, Unit]] =
     title => State { repos => {
-      if (repos.noteRepo.exists(_.title == title))
-        (repos.copy(noteRepo = repos.noteRepo.filter(_.title != title)), Right(()))
-      else
-        (repos, Left(NotFound))
-    }
+      if (repos.noteRepo.exists(_.title == title)) (repos.copy(noteRepo = repos.noteRepo.filter(_.title != title)), Right(()))
+      else (repos, Left(NotFound))
+      }
     }
 }

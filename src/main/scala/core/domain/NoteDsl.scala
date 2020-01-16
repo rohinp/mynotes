@@ -15,6 +15,8 @@ trait LogDsl[F[_]] {
 }
 
 trait MetricDsl[F[_], Title, Tag] {
+  def isExists:String => F[Either[MetricError,Boolean]]
+  def addNewMetric:MetricData => F[Either[MetricError,Unit]]
   def incrementByTitle:Title => F[Either[MetricError,Unit]]
   def incrementByTag:Tag => F[Either[MetricError, Unit]]
   def titleCount:Title => F[Either[MetricError,MetricData]]

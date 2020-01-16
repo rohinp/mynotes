@@ -18,11 +18,12 @@ object NoteApp extends App {
     _ <- modify("n3",Set(),"modified")
   } yield ()
 
-  private val inMemoryNoteState = noteProgram.run(Repositories(List(), List())).value._1
+  private val inMemoryNoteState = noteProgram.run(Repositories(List(), List(),List())).value._1
   println((Console.WHITE + "*" * 25) + "Note Repo" + (Console.WHITE + "*" * 25))
   println(Console.GREEN + inMemoryNoteState.noteRepo.mkString("\n"))
-
   println((Console.WHITE + "*" * 25) + "Metric Data" + (Console.WHITE + "*" * 25))
   println(Console.GREEN + inMemoryNoteState.metricRepo.mkString("\n"))
+  println((Console.WHITE + "*" * 25) + "Logs " + (Console.WHITE + "*" * 25))
+  println(Console.GREEN + inMemoryNoteState.logRepo.mkString("\n"))
   println(Console.WHITE + "*" * 50)
 }
