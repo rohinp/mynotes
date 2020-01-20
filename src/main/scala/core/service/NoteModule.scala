@@ -32,22 +32,23 @@ object NoteModule {
       note <- dsl.findByTitle(title)
       _ <- note.fold(
         error => dsl.info(s"Title search with $title failed with $error"),
-        _ => for {
-          _ <- dsl.info(s"Title searched is $title")
-          _ <- incrementByTitle[F](title)
-        } yield ()
+        _ => logAndMetric(title)(s"Title searched is $title")(incrementByTitle[F])
       )
     } yield note
+
+  def logAndMetric[F[_]](key: String)(msg:String)(f:String => F[Either[MetricError, Unit]])(implicit dsl: NoteAppDsl[F], F: Monad[F]) = {
+    for {
+      _ <- dsl.info(msg)
+      _ <- f(key)
+    } yield ()
+  }
 
   def searchNoteByTag[F[_]](tag: String)(implicit dsl: NoteAppDsl[F], F: Monad[F]): F[Either[NoteError, List[Note]]] =
     for {
       notes <- dsl.findByTag(tag)
       _ <- notes.fold(
         error => dsl.info(s"Tag search with $tag failed with $error"),
-        _ => for {
-          _ <- dsl.info(s"Tag searched is $tag")
-          _ <- incrementByTag[F](tag)
-        } yield ()
+        _ => logAndMetric(tag)(s"Tag searched is $tag")(incrementByTag[F])
       )
     } yield notes
 
