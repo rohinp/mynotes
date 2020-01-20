@@ -3,8 +3,8 @@ package core.service
 import core.domain.{NotFound, Note, TagCounter, TitleCounter}
 import org.scalatest.WordSpec
 import core.service.NoteModule._
-import interpreter.NoteAppDslInMemory._
-import repo.Repositories
+import interpreter.inmemory.NoteAppDslInMemory._
+import repo.inmemory.Repositories
 
 class NoteAppSpec extends WordSpec{
   "A Note" can {

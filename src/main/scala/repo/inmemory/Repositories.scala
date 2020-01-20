@@ -1,4 +1,4 @@
-package repo
+package repo.inmemory
 
 import cats.data.State
 import core.domain.{MetricData, Note}
@@ -12,6 +12,6 @@ object TypeAliases {
   type MyStateRepo[T] = State[Repositories, T]
 }
 
-import repo.TypeAliases._
+import repo.inmemory.TypeAliases._
 
 case class Repositories(noteRepo: NoteRepo, metricRepo: MetricRepo, logRepo: LogRepo)

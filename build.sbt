@@ -16,6 +16,9 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-kernel" % "2.0.0",
   "org.typelevel" %% "cats-core" % "2.0.0",
   "org.typelevel" %% "cats-effect" % "2.0.0",
+
+  "com.h2database" % "h2" % "1.4.200",
+
   "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 )
 

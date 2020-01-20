@@ -1,7 +1,8 @@
-package interpreter
+package interpreter.inmemory
+
 import cats.data.State
-import core.domain.{EmptyNoteRepo, NotFound, Note, NoteDsl, NoteError}
-import repo.TypeAliases.MyStateRepo
+import core.domain._
+import repo.inmemory.TypeAliases.MyStateRepo
 
 trait NoteInMemory extends NoteDsl[MyStateRepo,String, String, String]{
 

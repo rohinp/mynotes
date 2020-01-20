@@ -1,8 +1,8 @@
-package interpreter
+package interpreter.inmemory
 
 import cats.data.State
 import core.domain._
-import repo.TypeAliases.MyStateRepo
+import repo.inmemory.TypeAliases.MyStateRepo
 
 trait MetricInMemory extends MetricDsl[MyStateRepo, String, String] {
 
