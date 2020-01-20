@@ -1,6 +1,6 @@
 package core.domain
 
-class Note private(val title:String,val tags:Set[String],val data:String) {
+case class Note private(title:String, tags:Set[String], data:String) {
   override def toString: String = s"Note(title = $title, tags = $tags, data = $data)"
 }
 
