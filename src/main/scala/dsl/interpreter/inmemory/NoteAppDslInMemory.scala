@@ -1,6 +1,6 @@
-package interpreter.inmemory
+package dsl.interpreter.inmemory
 
-import core.domain.NoteAppDsl
+import dsl.NoteAppDsl
 import repo.inmemory.TypeAliases.MyStateRepo
 
 object NoteAppDslInMemory {

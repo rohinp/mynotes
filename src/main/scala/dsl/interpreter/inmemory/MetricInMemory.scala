@@ -1,4 +1,4 @@
-package interpreter.inmemory
+package dsl.interpreter.inmemory
 
 import cats.data.State
 import core.domain._

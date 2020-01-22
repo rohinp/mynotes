@@ -1,6 +1,6 @@
 package app
 import core.service.NoteModule._
-import interpreter.inmemory.NoteAppDslInMemory._
+import dsl.interpreter.inmemory.NoteAppDslInMemory._
 import repo.inmemory
 import repo.inmemory.Repositories
 

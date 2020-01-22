@@ -2,9 +2,10 @@ package core.service
 
 import cats.Monad
 import cats.implicits._
-import core.domain.{MetricData, MetricError, NoteAppDsl, NoteError, TagCounter, TitleCounter}
+import core.domain.{MetricData, MetricError, NoteError, TagCounter, TitleCounter}
+import dsl.NoteAppDsl
 
-object NoteMetricModule {
+object MetricModule {
 
   def incrementByTitle[F[_]](title:String)(implicit dsl: NoteAppDsl[F], F: Monad[F]):F[Either[MetricError, Unit]] =
     for {

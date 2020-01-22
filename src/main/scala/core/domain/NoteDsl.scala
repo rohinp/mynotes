@@ -23,4 +23,4 @@ trait MetricDsl[F[_], Title, Tag] {
   def tagCount:Tag => F[Either[MetricError,MetricData]]
 }
 
-trait NoteAppDsl[F[_]] extends NoteDsl[F,String, String, String] with LogDsl[F] with MetricDsl[F,String, String]
+

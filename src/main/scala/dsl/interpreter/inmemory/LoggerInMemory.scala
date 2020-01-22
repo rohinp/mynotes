@@ -1,8 +1,8 @@
-package interpreter.inmemory
+package dsl.interpreter.inmemory
 
 import cats.data.State
 import core.domain.LogDsl
-import repo.TypeAliases.MyStateRepo
+import repo.inmemory.TypeAliases.MyStateRepo
 import repo.inmemory.Repositories
 
 trait LoggerInMemory extends LogDsl[MyStateRepo]{

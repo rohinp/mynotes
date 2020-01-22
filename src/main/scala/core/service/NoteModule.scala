@@ -3,7 +3,8 @@ package core.service
 import cats.Monad
 import core.domain._
 import cats.implicits._
-import NoteMetricModule._
+import MetricModule._
+import dsl.NoteAppDsl
 
 object NoteModule {
 
