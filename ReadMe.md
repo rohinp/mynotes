@@ -1,7 +1,7 @@
 # My Note App
 
  It is a simple note app exercise. 
- The intention is to show how easy it is to use tagless-final style  and implement business as well as NFRs (log, metric, etc)
+ The intention is to show how easy it is to use tagless-initial style  and implement business as well as NFRs (log, metric, etc)
  (It is still a WIP)
  
  ### Prerequisites
